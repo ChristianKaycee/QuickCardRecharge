@@ -1,0 +1,44 @@
+
+<html>
+<head>
+  <title>USSD Code Formatter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    textarea { width: 100%; height: 150px; }
+    button { padding: 10px 20px; margin-top: 10px; }
+    .code { margin: 10px 0; background: #444; color: #fff; padding: 10px; border-radius: 5px; display: block; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<h2>Paste MTN Numbers</h2>
+<textarea id="input"></textarea><br>
+<button onclick="process()">Generate USSD Codes</button>
+
+<div id="output"></div>
+
+<script>
+function process() {
+  const text = document.getElementById("input").value;
+  const lines = text.trim().split('\n').reverse();
+  const output = document.getElementById("output");
+  output.innerHTML = '';
+
+  lines.forEach(line => {
+    const cleaned = line.trim();
+    if (/^\d{11,}$/.test(cleaned)) {
+      const code = `*311*${cleaned}#`;
+      const encoded = code.replace('#', '%23');
+      const a = document.createElement('a');
+      a.href = `tel:${encoded}`;
+      a.innerText = code;
+      a.className = 'code';
+      output.appendChild(a);
+    }
+  });
+}
+</script>
+
+</body>
+</html>
